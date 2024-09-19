@@ -43,4 +43,14 @@ public class DatabaseConnection {
             e.printStackTrace();
         }
     }
+
+    public void closeConnection() {
+        try (Connection conn = getConnection()) {
+            conn.close();
+            System.out.println("Connexion à la base de données fermée");
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la fermeture de la connexion à la base de données");
+            e.printStackTrace();
+        }
+    }
 }
