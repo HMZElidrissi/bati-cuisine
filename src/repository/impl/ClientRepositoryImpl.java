@@ -48,7 +48,12 @@ public class ClientRepositoryImpl extends GenericJDBCRepository<Client> implemen
 
     @Override
     protected Optional<Client> mapResultSetToModel(ResultSet resultSet) throws SQLException {
-        return Optional.empty();
+        Long id = resultSet.getLong("id");
+        String nom = resultSet.getString("nom");
+        String adresse = resultSet.getString("adresse");
+        String telephone = resultSet.getString("telephone");
+        boolean estProfessionnel = resultSet.getBoolean("estProfessionnel");
+        return Optional.of(new Client(id, nom, adresse, telephone, estProfessionnel));
     }
 
     @Override

@@ -2,7 +2,10 @@ package util;
 
 
 import model.Client;
+import model.Projet;
+import model.EtatProjet;
 import service.ClientService;
+import service.ProjetService;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -17,19 +20,19 @@ public class CLI {
         System.out.println("4. Quitter");
     }
 
-    public void createNewProject(Scanner scanner, ClientService clientService) {
+    public void createNewProject(Scanner scanner, ClientService clientService, ProjetService projetService) throws SQLException {
         System.out.println("--- Recherche de client ---");
         Client client = assignClient(scanner, clientService);
         if (client != null) {
             String nomProjet = getStringInput("Entrez le nom du projet : ", scanner);
 
-            // TODO: Create a new project with the given client, project name, and profit margin = 0
+            Projet projet = projetService.createProject(nomProjet, client);
 
-            addMateriauxToProject(scanner);
+            addMateriauxToProject(scanner, projet);
 
-            addMainOeuvreToProject(scanner);
+            addMainOeuvreToProject(scanner, projet);
 
-            calculateProjectCost(scanner);
+            calculateProjectCost(scanner, projet);
 
             createDevis(scanner);
         } else {
@@ -37,17 +40,17 @@ public class CLI {
         }
     }
 
-    public void addMateriauxToProject(Scanner scanner) {
+    public void addMateriauxToProject(Scanner scanner, Projet projet) {
         System.out.println("--- Ajout des matériaux ---");
         // TODO: Add materials to the project
     }
 
-    public void addMainOeuvreToProject(Scanner scanner) {
+    public void addMainOeuvreToProject(Scanner scanner, Projet projet) {
         System.out.println("--- Ajout de la main d'oeuvre ---");
         // TODO: Add labor to the project
     }
 
-    public void calculateProjectCost(Scanner scanner) {
+    public void calculateProjectCost(Scanner scanner, Projet projet) {
         System.out.println("--- Calcul du coût total du projet ---");
         // TODO: Calculate the total cost of the project
     }
@@ -73,7 +76,12 @@ public class CLI {
                     return assignClient(scanner, clientService);
                 } else {
                     System.out.println(client);
-                    return client;
+                    System.out.println("Souhaitez-vous continuer avec ce client ? (o/n)");
+                    if (getBooleanInput("Votre choix : ", scanner)) {
+                        return client;
+                    } else {
+                        return assignClient(scanner, clientService);
+                    }
                 }
             case 2:
                 return createNewClient(scanner, clientService);
