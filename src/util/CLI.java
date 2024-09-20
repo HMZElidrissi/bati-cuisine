@@ -1,10 +1,10 @@
 package util;
 
 
-import model.Client;
-import model.Projet;
-import model.EtatProjet;
+import model.*;
 import service.ClientService;
+import service.MainDoeuvreService;
+import service.MaterielService;
 import service.ProjetService;
 
 import java.sql.SQLException;
@@ -20,7 +20,7 @@ public class CLI {
         System.out.println("4. Quitter");
     }
 
-    public void createNewProject(Scanner scanner, ClientService clientService, ProjetService projetService) throws SQLException {
+    public void createNewProject(Scanner scanner, ClientService clientService, ProjetService projetService, MaterielService materielService, MainDoeuvreService mainDoeuvreService) throws SQLException {
         System.out.println("--- Recherche de client ---");
         Client client = assignClient(scanner, clientService);
         if (client != null) {
@@ -28,9 +28,11 @@ public class CLI {
 
             Projet projet = projetService.createProject(nomProjet, client);
 
-            addMateriauxToProject(scanner, projet);
+            System.out.println("--- Ajout des matériaux ---");
+            addMateriauxToProject(scanner, projet, materielService);
 
-            addMainOeuvreToProject(scanner, projet);
+            System.out.println("--- Ajout de la main d'oeuvre ---");
+            addMainOeuvreToProject(scanner, projet, mainDoeuvreService);
 
             calculateProjectCost(scanner, projet);
 
@@ -40,14 +42,43 @@ public class CLI {
         }
     }
 
-    public void addMateriauxToProject(Scanner scanner, Projet projet) {
-        System.out.println("--- Ajout des matériaux ---");
-        // TODO: Add materials to the project
+    public void addMateriauxToProject(Scanner scanner, Projet projet, MaterielService materielService) {
+        String nomMateriel = getStringInput("Entrez le nom du matériel : ", scanner);
+        double tauxTVA = getDoubleInput("Entrez le taux de TVA : ", scanner);
+        double coutUnitaire = getDoubleInput("Entrez le coût unitaire : ", scanner);
+        double quantite = getDoubleInput("Entrez la quantité : ", scanner);
+        double coutTransport = getDoubleInput("Entrez le coût de transport : ", scanner);
+        double coefficientQualite = getDoubleInput("Entrez le coefficient de qualité (1.0 = standard, > 1.0 = haute qualité) : ", scanner);
+
+        materielService.createMateriel(nomMateriel, tauxTVA, projet, coutUnitaire, quantite, coutTransport, coefficientQualite);
+        System.out.println("Matérieux ajouté avec succès.");
+
+        System.out.println("Voulez-vous ajouter un autre matériel ? (o/n)");
+
+        if (getBooleanInput("Votre choix : ", scanner)) {
+            addMateriauxToProject(scanner, projet, materielService);
+        } else {
+            System.out.println("Ajout de matériaux terminé.");
+        }
+
     }
 
-    public void addMainOeuvreToProject(Scanner scanner, Projet projet) {
-        System.out.println("--- Ajout de la main d'oeuvre ---");
-        // TODO: Add labor to the project
+    public void addMainOeuvreToProject(Scanner scanner, Projet projet, MainDoeuvreService mainDoeuvreService) {
+        String nomMainOeuvre = getStringInput("Entrez le nom de la main d'oeuvre : ", scanner);
+        double tauxTVA = getDoubleInput("Entrez le taux de TVA : ", scanner);
+        double tauxHoraire = getDoubleInput("Entrez le taux horaire : ", scanner);
+        double heuresTravail = getDoubleInput("Entrez le nombre d'heures de travail : ", scanner);
+        double productiviteOuvrier = getDoubleInput("Entrez la productivité de l'ouvrier : (1.0 = standard, > 1.0 = haute productivité) : ", scanner);
+
+        mainDoeuvreService.createMainDoeuvre(nomMainOeuvre, tauxTVA, projet, tauxHoraire, heuresTravail, productiviteOuvrier);
+        System.out.println("Main d'oeuvre ajoutée avec succès.");
+
+        System.out.println("Voulez-vous ajouter une autre main d'oeuvre ? (o/n)");
+        if (getBooleanInput("Votre choix : ", scanner)) {
+            addMainOeuvreToProject(scanner, projet, mainDoeuvreService);
+        } else {
+            System.out.println("Ajout de main d'oeuvre terminé.");
+        }
     }
 
     public void calculateProjectCost(Scanner scanner, Projet projet) {
@@ -108,14 +139,8 @@ public class CLI {
         String telephone = getStringInput("Numéro de téléphone : ", scanner);
         boolean estProfessionnel = getBooleanInput("Est-ce un client professionnel ? (o/n) : ", scanner);
 
-        Client newClient = new Client();
-        newClient.setNom(nom);
-        newClient.setAdresse(adresse);
-        newClient.setTelephone(telephone);
-        newClient.setEstProfessionnel(estProfessionnel);
-
         try {
-            return clientService.createClient(newClient);
+            return clientService.createClient(nom, adresse, telephone, estProfessionnel);
         } catch (SQLException e) {
             System.out.println("Erreur lors de la création du client.");
             return null;

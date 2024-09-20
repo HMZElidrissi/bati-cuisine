@@ -13,7 +13,8 @@ public class ClientService {
         this.clientRepository = new ClientRepositoryImpl();
     }
 
-    public Client createClient(Client client) throws SQLException {
+    public Client createClient(String nom, String adresse, String telephone, boolean estProfessionnel) throws SQLException {
+        Client client = new Client(nom, adresse, telephone, estProfessionnel);
         return clientRepository.createClient(client);
     }
 

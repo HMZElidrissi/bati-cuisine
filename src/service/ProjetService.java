@@ -16,12 +16,7 @@ public class ProjetService {
     }
 
     public Projet createProject(String nomProjet, Client client) throws SQLException {
-        Projet newProject = new Projet();
-        newProject.setNomProjet(nomProjet);
-        newProject.setClient(client);
-        newProject.setMargeBeneficiaire(0.0);
-        newProject.setCoutTotal(0.0);
-        newProject.setEtatProjet(EtatProjet.EN_COURS);
+        Projet newProject = new Projet(nomProjet, client);
         return projectRepository.createProject(newProject);
     }
 }

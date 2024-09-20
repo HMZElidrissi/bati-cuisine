@@ -6,16 +6,16 @@ public class Materiel extends Composant {
     private double coutTransport;
     private double coefficientQualite;
 
-    public Materiel(Long id, String nom, double tauxTVA, double coutUnitaire, double quantite, double coutTransport, double coefficientQualite) {
-        super(id, nom, TypeComposant.MATERIEL, tauxTVA);
+    public Materiel(Long id, String nom, double tauxTVA, Projet projet, double coutUnitaire, double quantite, double coutTransport, double coefficientQualite) {
+        super(id, nom, TypeComposant.MATERIEL, tauxTVA, projet);
         this.coutUnitaire = coutUnitaire;
         this.quantite = quantite;
         this.coutTransport = coutTransport;
         this.coefficientQualite = coefficientQualite;
     }
 
-    public Materiel(String nom, TypeComposant typeComposant, double tauxTVA, double coutUnitaire, double quantite, double coutTransport, double coefficientQualite) {
-        super(nom, typeComposant, tauxTVA);
+    public Materiel(String nom, double tauxTVA, Projet projet, double coutUnitaire, double quantite, double coutTransport, double coefficientQualite) {
+        super(nom, TypeComposant.MATERIEL, tauxTVA, projet);
         this.coutUnitaire = coutUnitaire;
         this.quantite = quantite;
         this.coutTransport = coutTransport;

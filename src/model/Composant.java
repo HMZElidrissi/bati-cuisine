@@ -6,16 +6,21 @@ public abstract class Composant {
     private TypeComposant typeComposant;
     private double tauxTVA;
 
-    public Composant(Long id, String nom, TypeComposant typeComposant, double tauxTVA) {
+    private Projet projet;
+
+    public Composant(Long id, String nom, TypeComposant typeComposant, double tauxTVA, Projet projet) {
+        this.id = id;
         this.nom = nom;
         this.typeComposant = typeComposant;
         this.tauxTVA = tauxTVA;
+        this.projet = projet;
     }
 
-    public Composant(String nom, TypeComposant typeComposant, double tauxTVA) {
+    public Composant(String nom, TypeComposant typeComposant, double tauxTVA, Projet projet) {
         this.nom = nom;
         this.typeComposant = typeComposant;
         this.tauxTVA = tauxTVA;
+        this.projet = projet;
     }
 
     public Long getId() {
@@ -48,5 +53,13 @@ public abstract class Composant {
 
     public void setTauxTVA(double tauxTVA) {
         this.tauxTVA = tauxTVA;
+    }
+
+    public Projet getProjet() {
+        return projet;
+    }
+
+    public void setProjet(Projet projet) {
+        this.projet = projet;
     }
 }

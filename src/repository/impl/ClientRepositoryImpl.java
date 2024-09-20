@@ -43,7 +43,7 @@ public class ClientRepositoryImpl extends GenericJDBCRepository<Client> implemen
 
     @Override
     public List<Client> getAllClients() {
-        return List.of();
+        return this.findAll(new HashMap<>());
     }
 
     @Override
@@ -63,6 +63,6 @@ public class ClientRepositoryImpl extends GenericJDBCRepository<Client> implemen
         data.put("adresse", model.getAdresse());
         data.put("telephone", model.getTelephone());
         data.put("estProfessionnel", model.isEstProfessionnel());
-        return Map.of();
+        return data;
     }
 }

@@ -5,15 +5,15 @@ public class MainDoeuvre extends Composant {
     private double heuresTravail;
     private double productiviteOuvrier;
 
-    public MainDoeuvre(Long id, String nom, double tauxTVA, double tauxHoraire, double heuresTravail, double productiviteOuvrier) {
-        super(id, nom, TypeComposant.MAIN_DOEUVRE, tauxTVA);
+    public MainDoeuvre(Long id, String nom, double tauxTVA, Projet projet, double tauxHoraire, double heuresTravail, double productiviteOuvrier) {
+        super(id, nom, TypeComposant.MAIN_DOEUVRE, tauxTVA, projet);
         this.tauxHoraire = tauxHoraire;
         this.heuresTravail = heuresTravail;
         this.productiviteOuvrier = productiviteOuvrier;
     }
 
-    public MainDoeuvre(String nom, TypeComposant typeComposant, double tauxTVA, double tauxHoraire, double heuresTravail, double productiviteOuvrier) {
-        super(nom, typeComposant, tauxTVA);
+    public MainDoeuvre(String nom, double tauxTVA, Projet projet, double tauxHoraire, double heuresTravail, double productiviteOuvrier) {
+        super(nom, TypeComposant.MAIN_DOEUVRE, tauxTVA, projet);
         this.tauxHoraire = tauxHoraire;
         this.heuresTravail = heuresTravail;
         this.productiviteOuvrier = productiviteOuvrier;

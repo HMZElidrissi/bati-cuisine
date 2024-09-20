@@ -1,4 +1,7 @@
+import service.MainDoeuvreService;
+import service.MaterielService;
 import util.CLI;
+import service.ProjetService;
 import service.ClientService;
 import util.DatabaseConnection;
 import util.InputValidator;
@@ -8,10 +11,17 @@ import java.util.Scanner;
 
 public class Main {
     private static ClientService clientService;
-    public static void main(String[] args) {
+    private static ProjetService projetService;
+    private static MaterielService materielService;
+    private static MainDoeuvreService mainDoeuvreService;
+
+    public static void main(String[] args) throws SQLException {
 
         try {
             clientService = new ClientService();
+            projetService = new ProjetService();
+            materielService = new MaterielService();
+            mainDoeuvreService = new MainDoeuvreService();
         } catch (SQLException e) {
             System.out.println("Erreur lors l'initalisation des services.");
             e.printStackTrace();
@@ -28,7 +38,7 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    cli.createNewProject(scanner, clientService);
+                    cli.createNewProject(scanner, clientService, projetService, materielService, mainDoeuvreService);
                     break;
                 case 2:
                     // TODO: Implement displaying existing projects
