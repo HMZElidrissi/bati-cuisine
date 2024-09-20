@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Client {
     private Long id;
     private String nom;
@@ -7,12 +10,23 @@ public class Client {
     private String telephone;
     private boolean estProfessionnel;
 
+    private List<Projet> projets;
+
     public Client(Long id, String nom, String adresse, String telephone, boolean estProfessionnel) {
         this.id = id;
         this.nom = nom;
         this.adresse = adresse;
         this.telephone = telephone;
         this.estProfessionnel = estProfessionnel;
+        this.projets = new ArrayList<>();
+    }
+
+    public Client(String nom, String adresse, String telephone, boolean estProfessionnel) {
+        this.nom = nom;
+        this.adresse = adresse;
+        this.telephone = telephone;
+        this.estProfessionnel = estProfessionnel;
+        this.projets = new ArrayList<>();
     }
 
     public Client() {
@@ -56,6 +70,14 @@ public class Client {
 
     public void setEstProfessionnel(boolean estProfessionnel) {
         this.estProfessionnel = estProfessionnel;
+    }
+
+    public List<Projet> getProjets() {
+        return projets;
+    }
+
+    public void setProjets(List<Projet> projets) {
+        this.projets = projets;
     }
 
     @Override

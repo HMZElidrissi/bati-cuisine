@@ -1,12 +1,18 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Projet {
     private Long id;
     private String nomProjet;
     private double margeBeneficiaire;
     private double coutTotal;
     private EtatProjet etatProjet;
+
     private Client client;
+    private List<Composant> composants;
+    private Devis devis;
 
     public Projet(Long id, String nomProjet, double margeBeneficiaire, double coutTotal, EtatProjet etatProjet, Client client) {
         this.id = id;
@@ -15,6 +21,15 @@ public class Projet {
         this.coutTotal = coutTotal;
         this.etatProjet = etatProjet;
         this.client = client;
+    }
+
+    public Projet(String nomProjet, Client client) {
+        this.nomProjet = nomProjet;
+        this.client = client;
+        this.margeBeneficiaire = 0.0;
+        this.coutTotal = 0.0;
+        this.etatProjet = EtatProjet.EN_COURS;
+        this.composants = new ArrayList<>();
     }
 
     public Projet() {
@@ -66,5 +81,21 @@ public class Projet {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public List<Composant> getComposants() {
+        return composants;
+    }
+
+    public void setComposants(List<Composant> composants) {
+        this.composants = composants;
+    }
+
+    public Devis getDevis() {
+        return devis;
+    }
+
+    public void setDevis(Devis devis) {
+        this.devis = devis;
     }
 }
