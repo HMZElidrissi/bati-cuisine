@@ -1,6 +1,7 @@
 package repository.impl;
 
 import model.Client;
+import model.Composant;
 import model.EtatProjet;
 import model.Projet;
 import repository.ProjetRepository;
@@ -9,6 +10,7 @@ import repository.GenericJDBCRepository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,5 +44,19 @@ public class ProjetRepositoryImpl extends GenericJDBCRepository<Projet> implemen
     @Override
     public Projet createProject(Projet project) {
         return this.save(mapModelData(project));
+    }
+
+    @Override
+    public void applyMargeBeneficiaire(Projet project, double margeBeneficiaire) throws SQLException {
+        Map<String, Object> data = new HashMap<>();
+        data.put("marge_beneficiaire", margeBeneficiaire);
+        this.update(data, project.getId());
+    }
+
+    @Override
+    public void setCoutTotal(Projet project, double coutTotal) throws SQLException {
+        Map<String, Object> data = new HashMap<>();
+        data.put("cout_total", coutTotal);
+        this.update(data, project.getId());
     }
 }

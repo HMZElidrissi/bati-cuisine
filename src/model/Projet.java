@@ -98,4 +98,12 @@ public class Projet {
     public void setDevis(Devis devis) {
         this.devis = devis;
     }
+
+    public void addComposant(Composant composant) {
+        this.composants.add(composant);
+    }
+
+    public void removeComposant(Composant composant) {
+        this.composants.remove(composant);
+    }
 }

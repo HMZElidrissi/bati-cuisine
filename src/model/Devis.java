@@ -20,6 +20,14 @@ public class Devis {
         this.projet.setDevis(this);
     }
 
+    public Devis(Long id, double montantEstime, LocalDate dateEmission, LocalDate dateValidite, boolean accepte) {
+        this.id = id;
+        this.montantEstime = montantEstime;
+        this.dateEmission = dateEmission;
+        this.dateValidite = dateValidite;
+        this.accepte = accepte;
+    }
+
     public Devis(double montantEstime, LocalDate dateEmission, LocalDate dateValidite, Projet projet) {
         this.montantEstime = montantEstime;
         this.dateEmission = dateEmission;

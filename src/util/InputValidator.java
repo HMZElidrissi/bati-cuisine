@@ -1,5 +1,8 @@
 package util;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class InputValidator {
@@ -34,12 +37,33 @@ public class InputValidator {
         while (true) {
             System.out.println(query);
             String response = scanner.nextLine().trim();
-            if (response.equals("1") || response.equals("oui")) {
+            if (response.equals("1") || response.equals("oui") || response.equals("o")) {
                 return true;
-            } else if (response.equals("0") || response.equals("non")) {
+            } else if (response.equals("0") || response.equals("non") || response.equals("n")) {
                 return false;
             } else {
                 System.out.println("Veuillez répondre par '1 (oui)/0 (non)'.");
+            }
+        }
+    }
+
+    public static LocalDate getLocalDateInput(String query, Scanner scanner) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate today = LocalDate.now();
+
+        while (true) {
+            try {
+                System.out.println(query + " (format: dd-mm-yyyy)");
+                String input = scanner.nextLine().trim();
+                LocalDate date = LocalDate.parse(input, formatter);
+
+                if (date.isBefore(today)) {
+                    System.out.println("La date doit être aujourd'hui ou dans le futur.");
+                } else {
+                    return date;
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Format de date invalide. Veuillez utiliser le format dd-mm-yyyy.");
             }
         }
     }

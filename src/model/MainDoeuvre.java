@@ -42,4 +42,9 @@ public class MainDoeuvre extends Composant {
     public void setProductiviteOuvrier(double productiviteOuvrier) {
         this.productiviteOuvrier = productiviteOuvrier;
     }
+
+    @Override
+    public double calculerCout() {
+        return tauxHoraire * heuresTravail * productiviteOuvrier;
+    }
 }

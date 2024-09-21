@@ -62,4 +62,6 @@ public abstract class Composant {
     public void setProjet(Projet projet) {
         this.projet = projet;
     }
+
+    public abstract double calculerCout();
 }

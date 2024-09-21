@@ -53,4 +53,9 @@ public class Materiel extends Composant {
     public void setCoefficientQualite(double coefficientQualite) {
         this.coefficientQualite = coefficientQualite;
     }
+
+    @Override
+    public double calculerCout() {
+        return (coutUnitaire * quantite + coutTransport) * coefficientQualite;
+    }
 }

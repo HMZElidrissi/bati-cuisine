@@ -46,11 +46,4 @@ public class MaterielRepositoryImpl extends GenericJDBCRepository<Materiel> impl
     public void createMateriel(Materiel materiel) {
         this.save(mapModelData(materiel));
     }
-
-    @Override
-    public void addMaterielToProject(Long projetId, Long materielId) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("projet_id", projetId);
-        this.update(data, materielId);
-    }
 }
