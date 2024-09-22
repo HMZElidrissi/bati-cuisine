@@ -21,6 +21,7 @@ public class Projet {
         this.coutTotal = coutTotal;
         this.etatProjet = etatProjet;
         this.client = client;
+        this.composants = new ArrayList<>();
     }
 
     public Projet(String nomProjet, Client client) {
@@ -105,5 +106,10 @@ public class Projet {
 
     public void removeComposant(Composant composant) {
         this.composants.remove(composant);
+    }
+
+    @Override
+    public String toString() {
+        return "\nID: " + id + "\nNom du projet: " + nomProjet + "\nMarge bénéficiaire: " + margeBeneficiaire + "\nCoût total: " + coutTotal + "\nÉtat du projet: " + etatProjet.toString() + "\nClient: " + client.getNom();
     }
 }

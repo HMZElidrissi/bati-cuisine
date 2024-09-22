@@ -33,17 +33,17 @@ public class Main {
         while (running) {
             CLI.mainMenu();
 
-            int choice = InputValidator.getIntInput("Choisissez une option : ", scanner);
+            int choice = InputValidator.getIntInput("\nChoisissez une option : ", scanner);
 
             switch (choice) {
                 case 1:
                     cli.createNewProject(scanner, clientService, projetService, materielService, mainDoeuvreService, devisService);
                     break;
                 case 2:
-                    // TODO: Implement displaying existing projects
+                    cli.displayExistingProjects(scanner, projetService);
                     break;
                 case 3:
-                    // TODO: Implement calculating project cost
+                    cli.calculateExistingProjectCost(scanner, projetService);
                     break;
                 case 4:
                     System.out.println("Au revoir !");

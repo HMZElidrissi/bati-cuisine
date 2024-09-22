@@ -16,7 +16,7 @@ CREATE TABLE projets
     marge_beneficiaire DECIMAL(5, 2)  NOT NULL,
     cout_total         DECIMAL(10, 2) NOT NULL,
     etat_projet        VARCHAR(20)    NOT NULL,
-    client_id          INTEGER REFERENCES client (id)
+    client_id          INTEGER REFERENCES clients (id)
 );
 
 -- Composant

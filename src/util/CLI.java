@@ -6,13 +6,14 @@ import service.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 import static util.InputValidator.*;
 
 public class CLI {
     public static void mainMenu() {
-        System.out.println("1. Créer un nouveau projet");
+        System.out.println("\n1. Créer un nouveau projet");
         System.out.println("2. Afficher les projets existants");
         System.out.println("3. Calculer le coût d'un projet");
         System.out.println("4. Quitter");
@@ -83,17 +84,18 @@ public class CLI {
 
     public void calculateProjectCost(Scanner scanner, Projet projet, ProjetService projetService) throws SQLException {
         System.out.println("--- Calcul du coût total du projet ---");
-        System.out.println("Souhaitez-vous appliquer une marge bénéficiaire au projet ? (o/n)");
-        if (getBooleanInput("Votre choix : ", scanner)) {
-            double margeBeneficiaire = getDoubleInput("Entrez le pourcentage de marge bénéficiaire : ", scanner);
-            projet.setMargeBeneficiaire(margeBeneficiaire);
-            projetService.applyMargeBeneficiaire(projet, margeBeneficiaire);
-            System.out.println("Calcul du coût en cours...");
-            calculateProjectCostResult(projet, projetService);
-        } else {
-            System.out.println("Calcul du coût en cours...");
-            calculateProjectCostResult(projet, projetService);
+
+        if (projet.getMargeBeneficiaire() == 0) {
+            System.out.println("Souhaitez-vous appliquer une marge bénéficiaire au projet ? (o/n)");
+            if (getBooleanInput("Votre choix : ", scanner)) {
+                double margeBeneficiaire = getDoubleInput("Entrez le pourcentage de marge bénéficiaire : ", scanner);
+                projet.setMargeBeneficiaire(margeBeneficiaire);
+                projetService.applyMargeBeneficiaire(projet, margeBeneficiaire);
+            }
         }
+
+        System.out.println("Calcul du coût en cours...");
+        calculateProjectCostResult(projet, projetService);
     }
 
     public void calculateProjectCostResult(Projet projet, ProjetService projetService) throws SQLException {
@@ -115,30 +117,33 @@ public class CLI {
             if (composant instanceof Materiel) {
                 totalMateriauxTTC += coutTTC;
                 totalMateriauxTVA += coutTTC * (tva / 100);
-                System.out.printf("Matériel - %s : %.2f €%n", composant.getNom(), coutTTC);
+                System.out.printf("Matériel - %s : %.2f MAD%n", composant.getNom(), coutTTC);
             } else if (composant instanceof MainDoeuvre) {
                 totalMainDOeuvreTTC += coutTTC;
                 totalMainDOeuvreTVA += coutTTC * (tva / 100);
-                System.out.printf("Main d'œuvre - %s : %.2f €%n", composant.getNom(), coutTTC);
+                System.out.printf("Main d'œuvre - %s : %.2f MAD%n", composant.getNom(), coutTTC);
             }
         }
 
-        System.out.printf("%nCoût total des matériaux avant TVA : %.2f €%n", totalMateriauxTTC);
-        System.out.printf("Coût total des matériaux après TVA : %.2f €%n", totalMateriauxTTC + totalMateriauxTVA);
-        System.out.printf("Coût total de la main d'œuvre avant TVA : %.2f €%n", totalMainDOeuvreTTC);
-        System.out.printf("Coût total de la main d'œuvre après TVA : %.2f €%n", totalMainDOeuvreTTC + totalMainDOeuvreTVA);
+        System.out.printf("%nCoût total des matériaux avant TVA : %.2f MAD%n", totalMateriauxTTC);
+        System.out.printf("Coût total des matériaux après TVA : %.2f MAD%n", totalMateriauxTTC + totalMateriauxTVA);
+        System.out.printf("Coût total de la main d'œuvre avant TVA : %.2f MAD%n", totalMainDOeuvreTTC);
+        System.out.printf("Coût total de la main d'œuvre après TVA : %.2f MAD%n", totalMainDOeuvreTTC + totalMainDOeuvreTVA);
 
         double coutTotalTTC = totalMateriauxTTC + totalMainDOeuvreTTC + totalMateriauxTVA + totalMainDOeuvreTVA;
+        if (projet.getClient().isEstProfessionnel()){
+            coutTotalTTC *= 0.9;
+        }
         projet.setCoutTotal(coutTotalTTC);
         projetService.setCoutTotal(projet, coutTotalTTC);
-        System.out.printf("%nCoût total avant marge : %.2f €%n", coutTotalTTC);
+        System.out.printf("%nCoût total avant marge : %.2f MAD%n", coutTotalTTC);
 
         double margeBeneficiaire = projet.getMargeBeneficiaire();
         double montantMarge = coutTotalTTC * (margeBeneficiaire / 100);
-        System.out.printf("Marge bénéficiaire (%.2f%%) : %.2f €%n", margeBeneficiaire, montantMarge);
+        System.out.printf("Marge bénéficiaire (%.2f%%) : %.2f MAD%n", margeBeneficiaire, montantMarge);
 
         double coutFinal = coutTotalTTC + montantMarge;
-        System.out.printf("%nCoût total final du projet : %.2f €%n", coutFinal);
+        System.out.printf("%nCoût total final du projet : %.2f MAD%n", coutFinal);
     }
 
     public void createDevis(Scanner scanner, Projet projet, DevisService devisService) {
@@ -148,7 +153,7 @@ public class CLI {
         LocalDate dateValidite = getLocalDateInput("Entrez la date de validité du devis : ", scanner);
         System.out.println("Souhaitez-vous enregistrer le devis ? (o/n)");
         if (getBooleanInput("Votre choix : ", scanner)) {
-            devisService.createDevis(dateEmission, dateValidite);
+            devisService.createDevis(montantEstime, dateEmission, dateValidite, false, projet);
             System.out.println("Devis enregistré avec succès.");
         } else {
             System.out.println("Enregistrement du devis annulé.");
@@ -209,5 +214,27 @@ public class CLI {
             System.out.println("Erreur lors de la création du client.");
             return null;
         }
+    }
+
+    public void displayExistingProjects(Scanner scanner, ProjetService projetService) throws SQLException {
+        System.out.println("--- Affichage des projets existants ---");
+        List<Projet> projects = projetService.getAllProjects();
+        if (projects.isEmpty()) {
+            System.out.println("Aucun projet existant.");
+        } else {
+            projects.forEach(System.out::println);
+        }
+    }
+
+    public void calculateExistingProjectCost(Scanner scanner, ProjetService projetService) throws SQLException {
+        System.out.println("--- Calcul du coût d'un projet existant ---");
+        projetService.getAllProjects().forEach(System.out::println);
+        long projectId = getLongInput("Entrez l'ID du projet : ", scanner);
+        Projet projet = projetService.getProjectById(projectId);
+        if (projet == null) {
+            System.out.println("Projet non trouvé.");
+            return;
+        }
+        calculateProjectCost(scanner, projet, projetService);
     }
 }

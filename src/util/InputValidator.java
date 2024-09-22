@@ -67,4 +67,15 @@ public class InputValidator {
             }
         }
     }
+
+    public static Long getLongInput(String query, Scanner scanner) {
+        while (true) {
+            try {
+                System.out.println(query);
+                return Long.parseLong(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Veuillez entrer un nombre entier valide.");
+            }
+        }
+    }
 }

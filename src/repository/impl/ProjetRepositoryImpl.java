@@ -1,18 +1,13 @@
 package repository.impl;
 
-import model.Client;
-import model.Composant;
-import model.EtatProjet;
-import model.Projet;
+import model.*;
 import repository.ProjetRepository;
 import repository.GenericJDBCRepository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ProjetRepositoryImpl extends GenericJDBCRepository<Projet> implements ProjetRepository {
     public ProjetRepositoryImpl() throws SQLException {
@@ -58,5 +53,61 @@ public class ProjetRepositoryImpl extends GenericJDBCRepository<Projet> implemen
         Map<String, Object> data = new HashMap<>();
         data.put("cout_total", coutTotal);
         this.update(data, project.getId());
+    }
+
+    @Override
+    public List<Materiel> getMaterielsByProjectId(Long projectId) throws SQLException {
+        String sql = "SELECT * FROM materiels WHERE projet_id = ?";
+        List<Materiel> materiels = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, projectId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Materiel materiel = new Materiel(
+                            rs.getLong("id"),
+                            rs.getString("nom"),
+                            rs.getDouble("taux_tva"),
+                            null, // We'll set the project later
+                            rs.getDouble("cout_unitaire"),
+                            rs.getDouble("quantite"),
+                            rs.getDouble("cout_transport"),
+                            rs.getDouble("coefficient_qualite")
+                    );
+                    materiels.add(materiel);
+                }
+            }
+        }
+        return materiels;
+    }
+
+    @Override
+    public List<MainDoeuvre> getMainDoeuvreByProjectId(Long projectId) throws SQLException {
+        String sql = "SELECT * FROM mains_doeuvre WHERE projet_id = ?";
+        List<MainDoeuvre> mainsDoeuvre = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, projectId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    MainDoeuvre mainDoeuvre = new MainDoeuvre(
+                            rs.getLong("id"),
+                            rs.getString("nom"),
+                            rs.getDouble("taux_tva"),
+                            null, // We'll set the project later
+                            rs.getDouble("taux_horaire"),
+                            rs.getDouble("heures_travail"),
+                            rs.getDouble("productivite_ouvrier")
+                    );
+                    mainsDoeuvre.add(mainDoeuvre);
+                }
+            }
+        }
+        return mainsDoeuvre;
+    }
+
+    @Override
+    public List<Projet> findAll() throws SQLException {
+        return this.findAll(new HashMap<>());
     }
 }

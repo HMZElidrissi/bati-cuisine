@@ -52,7 +52,7 @@ public class ClientRepositoryImpl extends GenericJDBCRepository<Client> implemen
         String nom = resultSet.getString("nom");
         String adresse = resultSet.getString("adresse");
         String telephone = resultSet.getString("telephone");
-        boolean estProfessionnel = resultSet.getBoolean("estProfessionnel");
+        boolean estProfessionnel = resultSet.getBoolean("est_professionnel");
         return Optional.of(new Client(id, nom, adresse, telephone, estProfessionnel));
     }
 
@@ -62,7 +62,7 @@ public class ClientRepositoryImpl extends GenericJDBCRepository<Client> implemen
         data.put("nom", model.getNom());
         data.put("adresse", model.getAdresse());
         data.put("telephone", model.getTelephone());
-        data.put("estProfessionnel", model.isEstProfessionnel());
+        data.put("est_professionnel", model.isEstProfessionnel());
         return data;
     }
 }
