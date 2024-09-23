@@ -43,6 +43,16 @@ public class ProjetService {
         return projetRepository.createProject(newProject);
     }
 
+    public void updateNomProjet(Projet project, String nomProjet) throws SQLException {
+        project.setNomProjet(nomProjet);
+        projetRepository.update(project);
+    }
+
+    public void updateClient(Projet project, Client client) throws SQLException {
+        project.setClient(client);
+        projetRepository.update(project);
+    }
+
     public void applyMargeBeneficiaire(Projet project, double margeBeneficiaire) throws SQLException {
         projetRepository.applyMargeBeneficiaire(project, margeBeneficiaire);
     }
@@ -53,5 +63,9 @@ public class ProjetService {
 
     public List<Projet> getAllProjects() throws SQLException {
         return projetRepository.findAll();
+    }
+
+    public void deleteProject(Projet project) throws SQLException {
+        projetRepository.deleteById(project.getId());
     }
 }

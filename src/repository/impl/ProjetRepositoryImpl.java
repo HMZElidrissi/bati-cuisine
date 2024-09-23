@@ -110,4 +110,9 @@ public class ProjetRepositoryImpl extends GenericJDBCRepository<Projet> implemen
     public List<Projet> findAll() throws SQLException {
         return this.findAll(new HashMap<>());
     }
+
+    @Override
+    public void update(Projet project) throws SQLException {
+        this.update(mapModelData(project), project.getId());
+    }
 }

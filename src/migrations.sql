@@ -26,7 +26,7 @@ CREATE TABLE composants
     nom            VARCHAR(100)  NOT NULL,
     taux_tva       DECIMAL(5, 2) NOT NULL,
     type_composant VARCHAR(20)   NOT NULL,
-    projet_id      INTEGER REFERENCES projets (id)
+    projet_id      INTEGER REFERENCES projets (id) ON DELETE CASCADE
 );
 
 -- Materiel
@@ -54,7 +54,7 @@ CREATE TABLE devis
     date_emission  DATE           NOT NULL,
     date_validite  DATE           NOT NULL,
     accepte        BOOLEAN        NOT NULL,
-    projet_id      INTEGER REFERENCES projets (id)
+    projet_id      INTEGER REFERENCES projets (id) ON DELETE CASCADE
 );
 
 -- Insert mock data

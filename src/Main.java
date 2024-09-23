@@ -46,6 +46,12 @@ public class Main {
                     cli.calculateExistingProjectCost(scanner, projetService);
                     break;
                 case 4:
+                    cli.updateProject(scanner, projetService, clientService);
+                    break;
+                case 5:
+                    cli.deleteProject(scanner, projetService);
+                    break;
+                case 6:
                     System.out.println("Au revoir !");
                     running = false;
                     break;

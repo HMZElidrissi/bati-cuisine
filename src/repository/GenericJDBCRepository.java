@@ -126,34 +126,6 @@ public abstract class GenericJDBCRepository<T> {
         }
     }
 
-    public int count() {
-        try (Statement statement = connection.createStatement()) {
-            try (ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + tableName)) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return 0;
-    }
-
-    protected List<T> executeCustomQuery(String sql, Object... params) throws SQLException {
-        List<T> results = new ArrayList<>();
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            for (int i = 0; i < params.length; i++) {
-                ps.setObject(i + 1, params[i]);
-            }
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    mapResultSetToModel(rs).ifPresent(results::add);
-                }
-            }
-        }
-        return results;
-    }
-
     protected abstract Optional<T> mapResultSetToModel(ResultSet resultSet) throws SQLException;
 
     protected abstract Map<String, Object> mapModelData(T model);

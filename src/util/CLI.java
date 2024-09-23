@@ -16,7 +16,9 @@ public class CLI {
         System.out.println("\n1. Créer un nouveau projet");
         System.out.println("2. Afficher les projets existants");
         System.out.println("3. Calculer le coût d'un projet");
-        System.out.println("4. Quitter");
+        System.out.println("4. Modifier un projet");
+        System.out.println("5. Supprimer un projet");
+        System.out.println("6. Quitter");
     }
 
     public void createNewProject(Scanner scanner, ClientService clientService, ProjetService projetService, MaterielService materielService, MainDoeuvreService mainDoeuvreService, DevisService devisService) throws SQLException {
@@ -237,5 +239,65 @@ public class CLI {
             return;
         }
         calculateProjectCost(scanner, projet, projetService);
+    }
+
+    public void updateProject(Scanner scanner, ProjetService projetService, ClientService clientService) throws SQLException {
+        System.out.println("--- Modification d'un projet existant ---");
+        projetService.getAllProjects().forEach(System.out::println);
+        long projectId = getLongInput("Entrez l'ID du projet à modifier : ", scanner);
+        Projet projet = projetService.getProjectById(projectId);
+        if (projet == null) {
+            System.out.println("Projet non trouvé.");
+            return;
+        }
+        System.out.println("Que voulez-vous modifier ?");
+        System.out.println("1. Nom du projet");
+        System.out.println("2. Client");
+        System.out.println("3. Marge bénéficiaire");
+        System.out.println("4. Retour");
+        int choice = getIntInput("Votre choix : ", scanner);
+        switch (choice) {
+            case 1:
+                String nomProjet = getStringInput("Entrez le nouveau nom du projet : ", scanner);
+                projetService.updateNomProjet(projet, nomProjet);
+                System.out.println("Nom du projet modifié avec succès.");
+                break;
+            case 2:
+                Client client = assignClient(scanner, clientService);
+                if (client != null) {
+                    projetService.updateClient(projet, client);
+                    System.out.println("Client modifié avec succès.");
+                } else {
+                    System.out.println("Modification du client annulée.");
+                }
+                break;
+            case 3:
+                double margeBeneficiaire = getDoubleInput("Entrez la nouvelle marge bénéficiaire : ", scanner);
+                projetService.applyMargeBeneficiaire(projet, margeBeneficiaire);
+                System.out.println("Marge bénéficiaire modifiée avec succès.");
+                break;
+            case 4:
+                return;
+            default:
+                System.out.println("Choix invalide.");
+        }
+    }
+
+    public void deleteProject(Scanner scanner, ProjetService projetService) throws SQLException {
+        System.out.println("--- Suppression d'un projet existant ---");
+        projetService.getAllProjects().forEach(System.out::println);
+        long projectId = getLongInput("Entrez l'ID du projet à supprimer : ", scanner);
+        Projet projet = projetService.getProjectById(projectId);
+        if (projet == null) {
+            System.out.println("Projet non trouvé.");
+            return;
+        }
+        System.out.println("Êtes-vous sûr de vouloir supprimer ce projet ? (o/n)");
+        if (getBooleanInput("Votre choix : ", scanner)) {
+            projetService.deleteProject(projet);
+            System.out.println("Projet supprimé avec succès.");
+        } else {
+            System.out.println("Suppression annulée.");
+        }
     }
 }

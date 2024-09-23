@@ -6,6 +6,7 @@ import model.Projet;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ProjetRepository {
@@ -16,4 +17,6 @@ public interface ProjetRepository {
     List<MainDoeuvre> getMainDoeuvreByProjectId(Long projectId) throws SQLException;
     Optional<Projet> findById(Long id) throws SQLException;
     List<Projet> findAll() throws SQLException;
+    void update(Projet project) throws SQLException;
+    void deleteById(Long id) throws SQLException;
 }
