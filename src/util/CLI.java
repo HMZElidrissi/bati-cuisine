@@ -148,15 +148,16 @@ public class CLI {
 
     public void createDevis(Scanner scanner, Projet projet, DevisService devisService) {
         System.out.println("--- Enregistrement du devis ---");
-        double montantEstime = projet.getCoutTotal();
+        double montantEstime = projet.getCoutTotal() + ((projet.getMargeBeneficiaire() / 100) * projet.getCoutTotal());
         LocalDate dateEmission = getLocalDateInput("Entrez la date d'émission du devis : ", scanner);
         LocalDate dateValidite = getLocalDateInput("Entrez la date de validité du devis : ", scanner);
-        System.out.println("Souhaitez-vous enregistrer le devis ? (o/n)");
+        System.out.println("Souhaitez-vous accepter le devis ? (o/n)");
         if (getBooleanInput("Votre choix : ", scanner)) {
-            devisService.createDevis(montantEstime, dateEmission, dateValidite, false, projet);
-            System.out.println("Devis enregistré avec succès.");
+            devisService.createDevis(montantEstime, dateEmission, dateValidite, true, projet);
+            System.out.println("Devis enregistré et accepté avec succès.");
         } else {
-            System.out.println("Enregistrement du devis annulé.");
+            devisService.createDevis(montantEstime, dateEmission, dateValidite, false, projet);
+            System.out.println("Devis enregistré et en attente d'acceptation.");
         }
     }
 
