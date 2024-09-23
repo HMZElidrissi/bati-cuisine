@@ -24,7 +24,7 @@ Bati-Cuisine est une application console Java destinée aux professionnels de la
 6. Générez le fichier JAR exécutable en exécutant la commande: 
 
     ```shell
-    javac -d bin src/**/*.java src/Main.java
+    javac -d bin -cp src src/**/*.java
     jar cvfm bati-cuisine.jar META-INF/MANIFEST.MF -C bin .
     java -jar bati-cuisine.jar
     ```
