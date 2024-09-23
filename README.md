@@ -30,8 +30,8 @@ Bati-Cuisine est une application console Java destinée aux professionnels de la
     ```
 
 ## Structure du projet
-- `src/java/model/` : Contient les classes de modèle (Client, Projet, Composant, etc.)
-- `src/java/repository/` : Contient les interfaces et implémentations des repositories
-- `src/java/service/` : Contient les classes de service qui gèrent la logique métier
-- `src/java/util/` : Contient les classes utilitaires (CLI, InputValidator, etc.)
-- `src/java/Main.java` : Point d'entrée de l'application
+- `src/model/` : Contient les classes de modèle (Client, Projet, Composant, etc.)
+- `src/repository/` : Contient les interfaces et implémentations des repositories
+- `src/service/` : Contient les classes de service qui gèrent la logique métier
+- `src/util/` : Contient les classes utilitaires (CLI, InputValidator, etc.)
+- `src/Main.java` : Point d'entrée de l'application
