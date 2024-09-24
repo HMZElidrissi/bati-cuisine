@@ -68,7 +68,7 @@ public class ProjetRepositoryImpl extends GenericJDBCRepository<Projet> implemen
                             rs.getLong("id"),
                             rs.getString("nom"),
                             rs.getDouble("taux_tva"),
-                            null, // We'll set the project later
+                            null,
                             rs.getDouble("cout_unitaire"),
                             rs.getDouble("quantite"),
                             rs.getDouble("cout_transport"),
@@ -94,7 +94,7 @@ public class ProjetRepositoryImpl extends GenericJDBCRepository<Projet> implemen
                             rs.getLong("id"),
                             rs.getString("nom"),
                             rs.getDouble("taux_tva"),
-                            null, // We'll set the project later
+                            null,
                             rs.getDouble("taux_horaire"),
                             rs.getDouble("heures_travail"),
                             rs.getDouble("productivite_ouvrier")
