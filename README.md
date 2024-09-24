@@ -13,7 +13,7 @@ Bati-Cuisine est une application console Java destinée aux professionnels de la
 
 ## Diagramme de classes
 
-![Diagramme de classes](UML_class_diagram.png)
+![Diagramme de classes](class_diagram.png)
 
 ## Prérequis
 - Java 8 ou supérieur
