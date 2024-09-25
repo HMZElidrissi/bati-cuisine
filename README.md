@@ -32,6 +32,7 @@ Bati-Cuisine est une application console Java destinée aux professionnels de la
     jar cvfm bati-cuisine.jar META-INF/MANIFEST.MF -C bin .
     java -jar bati-cuisine.jar
     ```
+>> `java -cp bati-cuisine.jar:postgresql-42.7.4.jar Main` pour spécifier le chemin du driver PostgreSQL
 
 ## Structure du projet
 - `src/model/` : Contient les classes de modèle (Client, Projet, Composant, etc.)
